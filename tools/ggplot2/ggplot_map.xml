@@ -120,7 +120,7 @@ wm <- borders("world", colour="gray50", fill="gray50")
 #this is the actual ggplot command to make the final plot(s)
 plot_out <- ggplot(input, aes(xcol, ycol)) + wm + gg_point + gg_line + gg_facet +
     gg_theme  + color_scale + gg_legend + ggtitle('$title') + xlab('$xlab') + ylab('$ylab')+
-    gg_axistitle + gg_axistext + gg_plottitle + gg_gridline
+    gg_axistitle + gg_axistext + gg_plottitle + gg_gridline + coord_fixed()
 
 @SAVE_OUTPUT@
         ]]></configfile>
