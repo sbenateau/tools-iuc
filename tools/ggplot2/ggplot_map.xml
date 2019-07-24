@@ -1,9 +1,10 @@
-<tool id="ggplot2_point" name="Scatterplot w ggplot2" version="@VERSION@+galaxy1">
+<tool id="ggplot2_map" name="Map w ggplot2" version="@VERSION@+galaxy1">
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements">
         <requirement type="package" version="1.2.1">r-svglite</requirement>
+        <requirement type="package" version="3.3.0">r-maps</requirement>
     </expand>
     <command detect_errors="exit_code"><![CDATA[
 cat '$script' &&
@@ -15,6 +16,7 @@ Rscript '$script'
 
 ## Import library
 library(ggplot2)
+library(maps)
 
 @THEME@
 
@@ -74,8 +76,6 @@ names(input)[$yplot] <- "ycol"
     #end if
 #end if
 
-@TRANSFORM@
-
 ##axis label custization
 #if $adv.axis_title_customization.axis_customization == "default"
     gg_axistitle = theme(axis.title = element_text(color = NULL, size = NULL, face = NULL))
@@ -115,9 +115,11 @@ names(input)[$yplot] <- "ycol"
     gg_point = NULL
 #end if
 
+wm <- borders("world", colour="gray50", fill="gray50")
+
 #this is the actual ggplot command to make the final plot(s)
-plot_out <- ggplot(input, aes(xcol, ycol)) + gg_point + gg_line + gg_facet +
-    gg_theme + gg_scalex + gg_scaley + color_scale + gg_legend + ggtitle('$title') + xlab('$xlab') + ylab('$ylab')+
+plot_out <- ggplot(input, aes(xcol, ycol)) + wm + gg_point + gg_line + gg_facet +
+    gg_theme  + color_scale + gg_legend + ggtitle('$title') + xlab('$xlab') + ylab('$ylab')+
     gg_axistitle + gg_axistext + gg_plottitle + gg_gridline
 
 @SAVE_OUTPUT@
@@ -199,8 +201,6 @@ plot_out <- ggplot(input, aes(xcol, ycol)) + gg_point + gg_line + gg_facet +
               <option value="hideminor">Hide minor grid lines</option>
               <option value="hideboth">Hide major and minor grid lines</option>
             </param>
-            <expand macro="transform" />
-            <expand macro="xy_scaling" />
             <expand macro="theme" />
             <expand macro="legend" />
         </section>
